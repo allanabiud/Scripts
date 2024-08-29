@@ -52,16 +52,26 @@ confirm() {
 
 # Function to print items in a grid layout
 print_grid() {
+	# Usage: print_grid [number of columns] "[list of items]
+	# Example: print_grid 2 "${dotfiles_list[@]}"
+	# Example: print_grid "${dotfiles_list[@]}" # Uses 2 columns by default
+	# OR
+	# Specify the number of columns as the first argument
+	# Example: num_cols=3; print_grid "$num_cols" "${dotfiles_list[@]}"
+
+	local cols=${1:-2} # Defaults to 2 columns if not specified
+	shift              # Remove the first argument (cols) if it was provided
+
 	local items=("$@")
-	local cols=2
-	local rows=$(((${#items[@]} + cols - 1) / cols))
+	local total_items=${#items[@]}
+	local rows=$(((total_items + cols - 1) / cols))
 	local col_width=25 # Adjust this value to change the column width
 
 	for ((i = 0; i < rows; i++)); do
 		for ((j = 0; j < cols; j++)); do
 			index=$((i + j * rows))
-			if [ $index -lt ${#items[@]} ]; then
-				printf "${YELLOW} - %-${col_width}s${NC}" "${items[$index]}"
+			if ((index < total_items)); then
+				printf "${YELLOW}%2d - %-${col_width}s${NC}" $((index + 1)) "${items[index]}"
 			fi
 		done
 		echo
@@ -476,9 +486,6 @@ stow_dotfiles() {
 	print_message "Dotfiles in cloned repo ($dotfiles_dir):"
 	dotfiles_list=($(ls -1 "$dotfiles_dir" | grep -v -E '\.(md|git)$'))
 	print_grid "${dotfiles_list[@]}"
-	# for ((i = 0; i < ${#dotfiles_list[@]}; i++)); do
-	# print_grid "${dotfiles_list[@]}"
-	# done
 
 	# Prompt user to select dotfiles to stow
 	echo -e -n "\n${BLUE} Select dotfile(s) to stow (space-separated numbers, or 'a' for all): ${NC}"
