@@ -5,7 +5,8 @@
 
 ## dotfilesSetup.sh (WIP)
 
-**USES STOW TO MANAGE DOTFILES**
+> [!NOTE]
+> USES STOW TO MANAGE DOTFILES
 
 For setting up a dotfiles repository.
 
@@ -18,7 +19,8 @@ It is able to:
 
 ## i3wmSetup.sh (WIP)
 
-**TO BE USED PRIMARILY ON ARCH AFTER INSTALLING I3WM USING THE ARCHINSTALL SCRIPT**
+> [!NOTE]
+> TO BE USED AFTER INSTALLING ARCH AND I3WM USING THE ARCHINSTALL SCRIPT
 
 For setting up i3wm.
 
@@ -30,16 +32,18 @@ It is able to:
 4. Use the dotfilesSetup.sh script to setup dotfiles.
 5. Install applications. (WIP)
 
-Clone this repository using the following command:
+---
 
-```
+- Clone this repository using the following command:
+
+```bash
 git clone https://github.com/abiud254/Scripts.git
 cd Scripts
 ```
 
-Run the scripts using the following commands:
+Run the scripts from the Scripts directory:
 
-```
+```bash
 ./dotfilesSetup.sh # For dotfilesSetup.sh
 ./i3wmSetup.sh # For i3wmSetup.sh
 ```
