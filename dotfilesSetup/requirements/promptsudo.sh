@@ -12,9 +12,10 @@ source ./requirements/messages.sh
 # Prompt for sudo access with confirmation
 prompt_sudo() {
   print_warning "SUDO PRIVILEGES REQUIRED!!"
+  print_separator
   print_message "This script requires sudo access to:"
   echo -e "${YELLOW} - Install script dependencies"
-  echo -e "${BLUE}------------------------------------------------------------------------------${NC}"
+  print_separator
   if confirm "Do you want to grant sudo access?"; then
     # Clear any existing sudo credentials
     sudo -k

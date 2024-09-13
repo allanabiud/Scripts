@@ -11,13 +11,13 @@ source ./requirements/messages.sh
 
 # Function to continue with script function
 continue_with_script() {
-  echo -e -n "\n${BLUE}------------------------------------------------------------------------------${NC}"
+  print_separator
   if confirm "Continue?"; then
     print_message "Continuing......"
   else
     print_message "Exiting......"
-    echo -e "${BLUE}------------------------------------------------------------------------------${NC}"
+    print_separator
     exit 1
   fi
-  echo -e "${BLUE}------------------------------------------------------------------------------${NC}"
+  print_separator
 }

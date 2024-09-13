@@ -20,7 +20,8 @@ script_dependencies() {
     for dependency in "${dependencies[@]}"; do
       echo -e "${YELLOW} - $dependency${NC}"
     done
-    echo
+
+    print_separator
 
     print_message "Checking if dependencies are installed...."
     for dependency in "${dependencies[@]}"; do

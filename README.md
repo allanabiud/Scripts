@@ -3,6 +3,8 @@
 1. dotfilesSetup.sh
 2. i3wmSetup.sh
 
+---
+
 ## dotfilesSetup.sh (WIP)
 
 > [!NOTE]
