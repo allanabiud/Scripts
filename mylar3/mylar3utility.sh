@@ -43,58 +43,104 @@ validate_directory() {
   return $?
 }
 
+##################################
+######### MESSAGES ##############
+##################################
+# Function to print colored messages
+print_message() {
+  echo -e "\n${BLUE}==> $1${NC}"
+}
+# Function to print success message
+print_success() {
+  echo -e "\n${GREEN}==> $1${NC}"
+}
+# Function to print error message
+print_error() {
+  echo -e "\n${RED}==> $1${NC}"
+}
+# Function to print warning message
+print_warning() {
+  echo -e "\n${YELLOW}==> $1${NC}"
+}
+
+# Function to print separator
+print_separator() {
+  echo -e "\n${BLUE}------------------------------------------------------------------------------${NC}"
+}
+
+# Function to print short large separator
+print_short_large_separator() {
+  echo -e "${BLUE}======================================${NC}"
+}
+# Function to print long large separator
+print_long_large_separator() {
+  echo -e "${BLUE}===============================================================================${NC}"
+}
+
 ###################################
 ####### GET MYLAR INFO ###########
 ###################################
 get_remote_host() {
   while true; do
-    read -rp "Enter the remote host (user@hostname): " remote_host
+    print_message "Enter the remote host (user@hostname):"
+    read -rp " " remote_host
     if validate_remote_host "$remote_host"; then
-      echo "Remote host set to $remote_host"
+      print_success "Remote host set to ${YELLOW}$remote_host${NC}"
       break
     else
-      echo "Invalid remote host format. Please use the format user@hostname"
+      print_error "Invalid remote host format. Please use the format ${YELLOW}user@hostname${NC}."
     fi
   done
 }
 
 get_mylar_directory() {
   while true; do
-    read -rp "Enter the Mylar3 directory (absolute path): " mylar_directory
+    print_message "Enter the Mylar3 directory (absolute path):"
+    read -rp " " mylar_directory
     if validate_directory "$mylar_directory"; then
-      echo "Mylar3 directory set to $mylar_directory"
+      print_success "Mylar3 directory set to ${YELLOW}$mylar_directory${NC}"
       break
     else
-      echo "Invalid directory path. Please enter a valid directory path."
+      print_error "Invalid directory path. Please enter a valid directory path."
     fi
   done
 }
 
 get_backup_directory() {
   while true; do
-    read -rp "Enter the backup directory (absolute path): " backup_directory
+    print_message "Enter the backup directory (absolute path):"
+    read -rp " " backup_directory
     if validate_directory "$backup_directory"; then
-      echo "Backup directory set to $backup_directory"
+      print_success "Backup directory set to ${YELLOW}$backup_directory${NC}"
       break
     else
-      echo "Invalid directory path. Please enter a valid directory path."
+      print_error "Invalid directory path. Please enter a valid directory path."
     fi
   done
 }
 
 get_mylar_api_key() {
-  read -rp "Enter your Mylar3 API key: " mylar_api_key
-  echo "Mylar3 API key set."
+  while true; do
+    print_message "Enter your Mylar3 API key:"
+    read -rp " " mylar_api_key
+    if [[ $mylar_api_key =~ ^[a-zA-Z0-9]+$ ]]; then
+      print_success "Mylar3 API key set."
+      break
+    else
+      print_error "Invalid Mylar3 API key. Please enter a valid Mylar3 API key."
+    fi
+  done
 }
 
 get_mylar_port() {
   while true; do
-    read -rp "Enter the Mylar3 port (default: 8090): " mylar_port
+    print_message "Enter the Mylar3 port (default: 8090):"
+    read -rp " " mylar_port
     if [[ $mylar_port =~ ^[0-9]+$ ]] && [ "$mylar_port" -ge 1 ] && [ "$mylar_port" -le 65535 ]; then
-      echo "Mylar3 port set to $mylar_port"
+      print_success "Mylar3 port set to ${YELLOW}$mylar_port${NC}"
       break
     else
-      echo "Invalid port number. Please enter a valid port number between 1 and 65535."
+      print_error "Invalid port number. Please enter a valid port number between 1 and 65535."
     fi
   done
 }
@@ -102,13 +148,6 @@ get_mylar_port() {
 remote_exec() {
   ssh "$remote_host" "$1"
 }
-
-# Get all configuration settings at the start
-get_remote_host
-get_mylar_directory
-get_backup_directory
-get_mylar_api_key
-get_mylar_port
 
 # Function to check Mylar3 service status
 check_status() {
@@ -156,26 +195,35 @@ check_missing() {
 ############################ MAIN SCRIPT #######################################
 ################################################################################
 
-while true; do
-  echo "
-  Mylar3 Utility Script
-  1. Check Mylar3 status
-  2. Start Mylar3 service
-  3. Stop Mylar3 service
-  4. Restart Mylar3 service
-  5. Update Mylar3 service
-  6. Backup Mylar3 database
-  7. Trigger library scan
-  8. Check for missing issues
-  9. Change remote host
-  10. Change Mylar3 directory
-  11. Change backup directory
-  12. Change Mylar3 API key
-  13. Change Mylar3 port
-  14. Exit
-  "
+clear
 
-  read -p "Enter your choice: " choice
+# Get all configuration settings at the start
+get_remote_host
+get_mylar_directory
+get_backup_directory
+get_mylar_api_key
+get_mylar_port
+
+while true; do
+  clear -x
+
+  print_message "Mylar3 Utility Script"
+  echo -e "${YELLOW}1. Start Mylar3 service${NC}"
+  echo -e "${YELLOW}2. Stop Mylar3 service${NC}"
+  echo -e "${YELLOW}3. Restart Mylar3 service${NC}"
+  echo -e "${YELLOW}4. Update Mylar3 service${NC}"
+  echo -e "${YELLOW}5. Backup Mylar3 database${NC}"
+  echo -e "${YELLOW}6. Trigger library scan${NC}"
+  echo -e "${YELLOW}7. Check for missing issues${NC}"
+  echo -e "${YELLOW}8. Change remote host${NC}"
+  echo -e "${YELLOW}9. Change Mylar3 directory${NC}"
+  echo -e "${YELLOW}10. Change backup directory${NC}"
+  echo -e "${YELLOW}11. Change Mylar3 API key${NC}"
+  echo -e "${YELLOW}12. Change Mylar3 port${NC}"
+  echo -e "${YELLOW}13. Exit${NC}"
+
+  print_message "Enter your choice:"
+  read -rp " " choice
 
   case $choice in
   1)
