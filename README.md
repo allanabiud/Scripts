@@ -2,8 +2,7 @@
 
 1. dotfilesSetup.sh
 2. i3wmSetup.sh
-
----
+3. mylar3utility.sh
 
 ## dotfilesSetup.sh (WIP)
 
@@ -34,7 +33,14 @@ It is able to:
 4. Use the dotfilesSetup.sh script to setup dotfiles.
 5. Install applications. (WIP)
 
+## mylar3utility (WIP)
+
+> [!NOTE]
+> CAN ONLY BE USED TO CONNECT TO A REMOTE CLIENT VIA SSH AND WITH A MYLAR3 INSTANCE INSTALLED
+
 ---
+
+# Usage
 
 - Clone this repository using the following command:
 
@@ -48,4 +54,5 @@ Run the scripts from the Scripts directory:
 ```bash
 ./dotfilesSetup.sh # For dotfilesSetup.sh
 ./i3wmSetup.sh # For i3wmSetup.sh
+./mylar3utility.sh # For mylar3utility.sh
 ```
