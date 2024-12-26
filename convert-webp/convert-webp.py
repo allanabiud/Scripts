@@ -1,5 +1,11 @@
 #!/usr/bin/python3
-import pathlib, subprocess, sys, shlex, logging, shutil, os
+import logging
+import os
+import pathlib
+import shlex
+import shutil
+import subprocess
+import sys
 
 logger = logging.getLogger("webp")
 logger.setLevel(logging.DEBUG)
@@ -46,8 +52,8 @@ def createWorkDir(filename):
     logger.info(f"Working directory: {work_path}")
     try:
         work_path.mkdir(mode=0o775, parents=True)
-    except FileExistsError as fee:
-        logger.info(f"Working directory already exists. Cleaning up.")
+    except FileExistsError as fee:  # noqa: F841
+        logger.info("Working directory already exists. Cleaning up.")
         shutil.rmtree(work_path)
         work_path.mkdir(mode=0o775, parents=True)
     return work_path
@@ -133,5 +139,5 @@ if __name__ == "__main__":
     files = getFilesToConvert(work_path)
     convertToWebP(files)
     createProcessedComic(work_path, comic_file)
-    logger.info(f"Conversion finished")
+    logger.info("Conversion finished")
     cleanUp(work_path)
