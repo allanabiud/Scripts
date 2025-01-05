@@ -9,7 +9,6 @@ beautifulsoup4 = "==4.12.3"
 certifi = "==2024.12.14"
 charset-normalizer = "==3.4.1"
 idna = "==3.10"
-pydantic = "==2.10.4"
 pydantic-core = "==2.27.2"
 ratelimit = "==2.2.1"
 requests = "==2.32.3"
@@ -17,6 +16,7 @@ simyan = "==1.4.0"
 soupsieve = "==2.6"
 typing-extensions = "==4.12.2"
 urllib3 = "==2.3.0"
+pydantic = "*"
 
 [dev-packages]
 

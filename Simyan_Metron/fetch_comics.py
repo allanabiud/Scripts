@@ -239,14 +239,14 @@ try:
     formatted_in_store_date = process_in_store_date(in_store_date)
 
     # Extract required fields
-    # creators = []
-    # if issue_details.creators:
-    #     for creator in issue_details.creators:
-    #         roles = (
-    #             creator.roles if isinstance(creator.roles, list) else [creator.roles]
-    #         )
-    #         roles_str = ", ".join(roles)
-    #         creators.append(f"{creator.name} ({roles_str})")
+    cv_creators = []
+    if issue_details.creators:
+        for creator in issue_details.creators:
+            roles = (
+                creator.roles if isinstance(creator.roles, list) else [creator.roles]
+            )
+            roles_str = ", ".join(roles)
+            cv_creators.append(f"{creator.name} ({roles_str})")
 
     # Remove HTML tags from the description
     description = issue_details.description or "N/A"
@@ -273,6 +273,7 @@ try:
         "Page Count": lcg_data.get("Page Count", "N/A"),
         "Description": description_cleaned,  # Use cleaned description
         "Creators": lcg_data.get("Creators", "N/A"),
+        "Creators (CV)": cv_creators if cv_creators else "N/A",
         "Characters": (
             ", ".join([char.name for char in issue_details.characters])
             if issue_details.characters
@@ -320,6 +321,7 @@ try:
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Comic Issue Details</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
         </head>
         <body>
             <div class="container mt-4">
@@ -332,6 +334,7 @@ try:
                             <div class="card-body">
                                 <h5 class="card-title">Cover Image</h5>
                                 <p class="card-text">This is the cover image of the comic issue.</p>
+                                <button class="btn btn-sm btn-outline-secondary download-btn" onclick="downloadImage('{data['Cover']}')"><i class="bi bi-download"></i></button>
                             </div>
                         </div>
                     </div>
@@ -343,43 +346,43 @@ try:
                                 <!-- Series, Number, Story Title, and Dates in a proportional layout -->
                                 <tr>
                                     <th>Series</th>
-                                    <td>{data["Series"]}</td>
-                                    <th>Number</th>
-                                    <td>{data["Number"]}</td>
+                                    <td>{data["Series"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Series']}')"><i class="bi bi-clipboard"></i></button></td>
+                                    <th>Number </th>
+                                    <td>{data["Number"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Number']}')"><i class="bi bi-clipboard"></i></button></td>
                                 </tr>
                                 <tr>
                                     <th>Collection Title</th>
-                                    <td>{data["Collection Title"]}</td>
+                                    <td>{data["Collection Title"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Collection Title']}')"><i class="bi bi-clipboard"></i></button></td>
                                     <th>Cover Date</th>
-                                    <td>{data["Cover Date"]}</td>
+                                    <td>{data["Cover Date"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Cover Date']}')"><i class="bi bi-clipboard"></i></button></td>
                                 </tr>
                                 <tr>
                                     <th>In Store Date</th>
-                                    <td>{data["In Store Date"]}</td>
+                                    <td>{data["In Store Date"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['In Store Date']}')"><i class="bi bi-clipboard"></i></button></td>
                                     <th>Comic Vine ID</th>
-                                    <td>{data["Comic Vine ID"]}</td>
+                                    <td>{data["Comic Vine ID"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Comic Vine ID']}')"><i class="bi bi-clipboard"></i></button></td>
                                 </tr>
                                 <tr>
                                     <th>Cover Price</th>
-                                    <td>{data["Cover Price"]}</td>
+                                    <td>{data["Cover Price"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Cover Price']}')"><i class="bi bi-clipboard"></i></button></td>
                                     <th>Page Count</th>
-                                    <td>{data["Page Count"]}</td>
+                                    <td>{data["Page Count"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Page Count']}')"><i class="bi bi-clipboard"></i></button></td>
                                 </tr>
                                 <tr>
                                     <th>ISBN</th>
-                                    <td>{data["ISBN"]}</td>
+                                    <td>{data["ISBN"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['ISBN']}')"><i class="bi bi-clipboard"></i></button></td>
                                     <th>Distributor SKU</th>
-                                    <td>{data["Distributor SKU"]}</td>
+                                    <td>{data["Distributor SKU"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Distributor SKU']}')"><i class="bi bi-clipboard"></i></button></td>
                                 </tr>
 
                                 <!-- UPC in one row -->
-                                <tr><th>UPC</th><td colspan="3">{data["UPC"]}</td></tr>
+                                <tr><th>UPC</th><td colspan="3">{data["UPC"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['UPC']}')"><i class="bi bi-clipboard"></i></button></td></tr>
 
                                 <!-- Story Titles in one row -->
-                                <tr><th>Story Titles</th><td colspan="3">{story_titles}</td></tr>
+                                <tr><th>Story Titles</th><td colspan="3">{story_titles} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard(`{story_titles}`)"><i class="bi bi-clipboard"></i></button></td></tr>
 
                                 <!-- Description in one row -->
-                                <tr><th>Description</th><td colspan="3">{data["Description"]}</td></tr>
+                                <tr><th>Description</th><td colspan="3">{data["Description"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Description']}')"><i class="bi bi-clipboard"></i></button></td></tr>
 
                                 <!-- Characters in two columns -->
                                 <tr>
@@ -388,12 +391,12 @@ try:
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <ul>
-                                                    {"".join([f"<li>{char}</li>" for char in data['Characters'].split(', ')[:len(data['Characters'].split(', '))//2]])}
+                                                    {"".join([f"<li>{char} <button class='btn btn-sm btn-outline-secondary copy-btn' onclick='copyToClipboard(\"{char}\")'><i class='bi bi-clipboard'></i></button></li>" for char in data['Characters'].split(', ')[:len(data['Characters'].split(', '))//2]])}
                                                 </ul>
                                             </div>
                                             <div class="col-md-6">
                                                 <ul>
-                                                    {"".join([f"<li>{char}</li>" for char in data['Characters'].split(', ')[len(data['Characters'].split(', '))//2:]])}
+                                                    {"".join([f"<li>{char} <button class='btn btn-sm btn-outline-secondary copy-btn' onclick='copyToClipboard(\"{char}\")'><i class='bi bi-clipboard'></i></button></li>" for char in data['Characters'].split(', ')[len(data['Characters'].split(', '))//2:]])}
                                                 </ul>
                                             </div>
                                         </div>
@@ -405,7 +408,7 @@ try:
                                     <th>Creators</th>
                                     <td colspan="3">
                                         <ol>
-                                            {"".join([f"<li><strong>{creator['name']}</strong> - {creator['role']}</li>" for creator in data['Creators']])}
+                                            {"".join([f"<li><strong>{creator['name']} <button class='btn btn-sm btn-outline-secondary copy-btn' onclick='copyToClipboard(\"{creator['name']}\")'><i class='bi bi-clipboard'></i></button></strong> - {creator['role']}</li>" for creator in data['Creators']])}
                                         </ol>
                                     </td>
                                 </tr>
@@ -417,12 +420,12 @@ try:
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <ul>
-                                                    {"".join([f"<li>{team}</li>" for team in data['Teams'].split(', ')[:len(data['Teams'].split(', '))//2]])}
+                                                    {"".join([f"<li>{team} <button class='btn btn-sm btn-outline-secondary copy-btn' onclick='copyToClipboard(\"{team}\")'><i class='bi bi-clipboard'></i></button></li>" for team in data['Teams'].split(', ')[:len(data['Teams'].split(', '))//2]])}
                                                 </ul>
                                             </div>
                                             <div class="col-md-6">
                                                 <ul>
-                                                    {"".join([f"<li>{team}</li>" for team in data['Teams'].split(', ')[len(data['Teams'].split(', '))//2:]])}
+                                                    {"".join([f"<li>{team} <button class='btn btn-sm btn-outline-secondary copy-btn' onclick='copyToClipboard(\"{team}\")'><i class='bi bi-clipboard'></i></button></li>" for team in data['Teams'].split(', ')[len(data['Teams'].split(', '))//2:]])}
                                                 </ul>
                                             </div>
                                         </div>
@@ -430,12 +433,28 @@ try:
                                 </tr>
 
                                 <!-- Arcs in one column -->
-                                <tr><th>Arcs</th><td colspan="3">{data["Arcs"]}</td></tr>
+                                <tr><th>Arcs</th><td colspan="3">{data["Arcs"]} <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard('{data['Arcs']}')"><i class="bi bi-clipboard"></i></button></td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
+            <script>
+                function copyToClipboard(text) {{
+                    navigator.clipboard.writeText(text).then(function() {{
+                        alert('Copied to clipboard: ' + text);
+                    }}, function(err) {{
+                        console.error('Failed to copy: ', err);
+                    }});
+                }}
+                function downloadImage(url) {{
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'cover.jpg';
+                    link.click();
+                }}
+            </script>
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         </body>
