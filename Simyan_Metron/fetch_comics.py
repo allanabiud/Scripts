@@ -443,7 +443,7 @@ try:
             <script>
                 function copyToClipboard(text) {{
                     navigator.clipboard.writeText(text).then(function() {{
-                        alert('Copied to clipboard: ' + text);
+                        // alert('Copied to clipboard: ' + text);
                     }}, function(err) {{
                         console.error('Failed to copy: ', err);
                     }});
