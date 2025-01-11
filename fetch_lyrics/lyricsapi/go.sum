@@ -1,2 +1,6 @@
+github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
+github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/raitonoberu/lyricsapi v0.0.0-20241025130908-3eee68a9ba64 h1:Adj9ly25p2F7wMiCV0Btd8rnQsJAtr1UrN+9XH5MFvQ=
 github.com/raitonoberu/lyricsapi v0.0.0-20241025130908-3eee68a9ba64/go.mod h1:OZuR43VBUauOq6BfM6M8Frcw7JPOSa2wKHP6lIqomhg=
+github.com/raitonoberu/lyricsapi v0.0.0-20250107165626-398ea42ab9e8 h1:HgCHStdwaAF5bqtbdTvDSi14Frr+f6I3ZwAMDJ2FGrk=
+github.com/raitonoberu/lyricsapi v0.0.0-20250107165626-398ea42ab9e8/go.mod h1:OZuR43VBUauOq6BfM6M8Frcw7JPOSa2wKHP6lIqomhg=

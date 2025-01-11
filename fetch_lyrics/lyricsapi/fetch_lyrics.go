@@ -8,23 +8,36 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
+	// "time"
 
-	"github.com/raitonoberu/lyricsapi/lyrics"
+	"github.com/joho/godotenv"
+	"github.com/raitonoberu/lyricsapi/spotify"
 )
 
 // SongInfo represents the JSON structure from rmpc
 type SongInfo struct {
 	File     string `json:"file"`
 	Metadata struct {
-		Artist string `json:"artist"`
-		Title  string `json:"title"`
+		Artist      string `json:"artist"`
+		Title       string `json:"title"`
+		AlbumArtist string `json:"albumartist"`
 	} `json:"metadata"`
 }
 
 func main() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+
+	// Fetch the cookie from the environment variable
+	cookie := os.Getenv("SPOTIFY_COOKIE")
+	if cookie == "" {
+		log.Fatalf("Environment variable SPOTIFY_COOKIE is not set")
+	}
+
 	// Configure the cookie for lyricsapi
-	api := lyrics.NewLyricsApi("AQAAYOQu93iIWoD4cpOGDzPyXbsZEDvEZ3MWSIx9Jyu1ejyWAlBVs2p3iVyvY0c4fiW-QI0EnAuZplfA6vGA7m79R3xc33WV_xfLS0t7oTaGMJkUrmnlnQO2EyTRxHXPeNfXF3wyij2XYtMGzGyhVurT3J20OZdxNPife_NmB__Sg1iyiAd23IHuTESBJZMJnev1Sf5XKRz3GPZ_xw")
+	api := spotify.NewClient("")
 
 	// Fetch song information using rmpc
 	songJSON, err := ioutil.ReadAll(os.Stdin) // Assumes rmpc song is piped into the script
@@ -38,11 +51,13 @@ func main() {
 	}
 
 	// Extract artist and title
-	artist := song.Metadata.Artist
+	// artist := song.Metadata.Artist
+	album_artist := song.Metadata.AlbumArtist
 	title := song.Metadata.Title
 	filePath := song.File
 
-	if artist == "" || title == "" || filePath == "" {
+	// if artist == "" || title == "" || filePath == "" {
+	if album_artist == "" || title == "" || filePath == "" {
 		log.Println("Missing artist, title, or file path, skipping lyrics fetch.")
 		return
 	}
@@ -58,32 +73,25 @@ func main() {
 	}
 
 	// Fetch lyrics using lyricsapi
-	log.Printf("Fetching lyrics for %s - %s...", title, artist)
-	lyrics, _ := api.GetByName(fmt.Sprintf("%s %s", title, artist))
+	log.Printf("Fetching lyrics for %s %s...", album_artist, title)
+	lyrics, _ := api.GetByName(fmt.Sprintf("%s %s", album_artist, title))
 	if lyrics == nil {
-		log.Printf("Lyrics not found for %s - %s", title, artist)
+		log.Printf("Lyrics not found for %s %s", album_artist, title)
 		return
 	} else {
-		log.Printf("Found lyrics for %s - %s", title, artist)
+		log.Printf("Found lyrics for %s %s", album_artist, title)
 	}
 
-	// Print lyrics
+	// Write LRC file
+	var lrcContent strings.Builder
 	for _, line := range lyrics {
-		t := time.UnixMilli(int64(line.Time)).Format("04:05")
-		fmt.Println(t, line.Words)
+		timeStamp := fmt.Sprintf("[%02d:%02d.%02d]", line.Time/60000, (line.Time%60000)/1000, (line.Time%1000)/10)
+		lrcContent.WriteString(fmt.Sprintf("%s %s\n", timeStamp, line.Words))
 	}
-	fmt.Println(lyrics)
 
-	// // Write LRC file
-	// var lrcContent strings.Builder
-	// for _, line := range lyrics {
-	// 	timeStamp := fmt.Sprintf("[%02d:%02d.%02d]", line.Time/60000, (line.Time%60000)/1000, (line.Time%1000)/10)
-	// 	lrcContent.WriteString(fmt.Sprintf("%s %s\n", timeStamp, line.Words))
-	// }
-	//
-	// if err := ioutil.WriteFile(lrcPath, []byte(lrcContent.String()), 0644); err != nil {
-	// 	log.Fatalf("Failed to write LRC file: %v", err)
-	// }
-	//
-	// log.Printf("Lyrics saved to: %s", lrcPath)
+	if err := ioutil.WriteFile(lrcPath, []byte(lrcContent.String()), 0644); err != nil {
+		log.Fatalf("Failed to write LRC file: %v", err)
+	}
+
+	log.Printf("Lyrics saved to: %s", lrcPath)
 }

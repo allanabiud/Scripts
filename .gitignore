@@ -1,2 +1,3 @@
 Simyan_Metron/output/*
 Simyan_Metron/.env
+fetch_lyrics/lyricsapi/.env
