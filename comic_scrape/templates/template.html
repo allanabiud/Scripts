@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Comic Details</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              rel="stylesheet">
+    </head>
+    <body>
+        <!-- Center the Comic Details Title -->
+        <div class="container mt-4">
+            <h1 class="text-center">Comic Details</h1>
+        </div>
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Left Column for Cover Image -->
+                <div class="col-md-4">
+                    {% if data['Cover'] != 'N/A' %}
+                        <div class="card">
+                            <img src="{{ data['Cover'] }}"
+                                 alt="Cover Image"
+                                 class="card-img-top img-fluid rounded">
+                            <div class="card-body">
+                                <h5 class="card-title">Cover Image</h5>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>No cover image available</p>
+                    {% endif %}
+                </div>
+                <!-- Right Column for Details -->
+                <div class="col-md-8">
+                    <h2>Details Table</h2>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Value</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, value in data.items() %}
+                                {% if key != 'Creators' and key != 'Characters' and key != 'Cover' %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ key }}</strong>
+                                        </td>
+                                        <td>{{ value }}</td>
+                                        <td>
+                                            <button class="btn btn-secondary" onclick="copyText('{{ value }}')">Copy</button>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Characters Section Outside Grid -->
+        <div class="container mt-4">
+            <h2>Characters</h2>
+            <div class="row">
+                {% for character in data['Characters'] %}
+                    <div class="col-md-2 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ character['name'] }}</h5>
+                                <button class="btn btn-primary" onclick="copyText('{{ character['name'] }}')">Copy Name</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Creators Section Outside Grid -->
+        <div class="container mt-4">
+            <h2>Creators</h2>
+            <div class="row">
+                {% for creator in data['Creators'] %}
+                    <div class="col-md-2 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ creator['name'] }}</h5>
+                                <p class="card-text">{{ creator['role'] }}</p>
+                                <button class="btn btn-primary" onclick="copyText('{{ creator['name'] }}')">Copy Name</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <script>
+            function copyText(text) {
+                navigator.clipboard.writeText(text).catch(function(err) {
+                    console.error("Error copying text: ", err);
+                });
+            }
+        </script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </body>
+</html>
