@@ -1,3 +1,4 @@
 comic_scrape/output/*
+__pycache__/
 comic_scrape/.env
 fetch_lyrics/lyricsapi/.env

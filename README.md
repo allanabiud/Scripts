@@ -1,58 +1,22 @@
 # Scripts
 
-1. dotfilesSetup.sh
-2. i3wmSetup.sh
-3. mylar3utility.sh
-
-## dotfilesSetup.sh (WIP)
-
-> [!NOTE]
-> USES STOW TO MANAGE DOTFILES
-
-For setting up a dotfiles repository.
-
-It is able to:
-
-1. Install stow
-2. Clone a github repository
-3. Stow dotfiles
-4. Handle existing dotfiles
-
-## i3wmSetup.sh (WIP)
-
-> [!NOTE]
-> TO BE USED AFTER INSTALLING ARCH AND I3WM USING THE ARCHINSTALL SCRIPT
-
-For setting up i3wm.
-
-It is able to:
-
-1. Update your system.
-2. Install i3wm dependencies.
-3. Install yay.
-4. Use the dotfilesSetup.sh script to setup dotfiles.
-5. Install applications. (WIP)
-
-## mylar3utility (WIP)
-
-> [!NOTE]
-> CAN ONLY BE USED TO CONNECT TO A REMOTE CLIENT VIA SSH AND WITH A MYLAR3 INSTANCE INSTALLED
-
----
+| Script            | Description                                                         | Requirements                                                                                    |
+| ----------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| setup_dotfiles.py | For setting up a stow dotfiles repository.                          | Stow                                                                                            |
+| comic_scrape.py   | Scrapes comic book covers from comicvine and league of comic geeks, | [Simyan](https://github.com/Metron-Project/Simyan) , [Rich](https://github.com/Textualize/rich) |
 
 # Usage
 
 - Clone this repository using the following command:
 
 ```bash
-git clone https://github.com/abiud254/Scripts.git
+git clone https://github.com/allanabiud/Scripts.git
 cd Scripts
 ```
 
-Run the scripts from the Scripts directory:
+Run the scripts from the script's directory:
 
 ```bash
-./dotfilesSetup.sh # For dotfilesSetup.sh
-./i3wmSetup.sh # For i3wmSetup.sh
-./mylar3utility.sh # For mylar3utility.sh
+python setup_dotfiles.py # for setup_dotfiles.py
+python comic_scrape.py # for comic_scrape.py
 ```
