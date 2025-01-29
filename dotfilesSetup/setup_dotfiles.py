@@ -621,7 +621,7 @@ def clone_dotfiles():
                     "[blue]Attempting to update existing repository...[/blue]"
                 )
                 if run_command(
-                    f"cd [yellow]{target_dir}[] && git remote set-url origin {repo_url} && git pull",
+                    f"cd {target_dir} && git remote set-url origin {repo_url} && git pull",
                     "Updating Repository",
                 ):
                     console.print("[green]Repository updated successfully.[/green]")
