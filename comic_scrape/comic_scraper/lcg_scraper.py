@@ -1,5 +1,6 @@
 import re
 
+import certifi
 import requests
 from bs4 import BeautifulSoup
 
@@ -11,10 +12,10 @@ def scrape_lcg_comic_page(url):
     #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     # }
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36"
     }
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, verify=certifi.where())
 
     # Check the status code of the response
     if response.status_code != 200:
