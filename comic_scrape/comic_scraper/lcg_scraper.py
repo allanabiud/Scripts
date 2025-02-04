@@ -85,13 +85,22 @@ def scrape_lcg_comic_page(url):
         # Extracting Story Titles
         unwanted_titles = {
             "overview",
+            "[Overview]",
             "[title page]",
+            "[Title Page]",
             "[dedication]",
+            "[Dedication]",
             "[illustration, title, and credits]",
+            "[Illustration, Title, and Credits]",
             "[title, illustration and credits]",
+            "[Title, Illustration and Credits]",
             "[creator biography]",
+            "[Creator Biography]",
             "[cover reprint]",
+            "[Cover Reprint]",
             "[variant cover gallery]",
+            "[Variant Cover Gallery]",
+            "Cover Progression",
         }
         story_titles = []
         story_section = soup.find_all(
