@@ -32,25 +32,55 @@ def scrape_lcg_comic_page(url):
 
             # Improved regex pattern to extract the details like pages and price
             # This pattern matches the page count (e.g., "280 pages") and price (e.g., "$49.99"),
-            # and ignores other content like "Hardcover" or "Dustjacket Cover".
-            pattern = r"(\d+)\s+pages\s+·\s+\$(\d+\.\d{2})"
-            match = re.search(pattern, price_details_text)
-
-            # Regex pattern to extract the details like pages and price
-            # pattern = r"(\w+ \w+)\s+·\s+(\d+)\s+pages\s+·\s+\$(\d+\.\d{2})"
+            # and format (e.g., "Hardcover")
+            # pattern = r"(\d+)\s+pages\s+·\s+\$(\d+\.\d{2})"
+            # pattern = r"([A-Za-z\s]+)\s+·\s+(\d+)\s+pages\s+·\s+\$(\d+\.\d{2})"
+            # Patterns for different orders:
+            patterns = [
+                r"([A-Za-z\s]+)\s+·\s+(\d+)\s+pages\s+·\s+\$(\d+\.\d{2})",  # Format · Page Count · Price
+                r"\$(\d+\.\d{2})\s+·\s+(\d+)\s+pages\s+·\s+([A-Za-z\s]+)",  # Price · Page Count · Format
+                r"(\d+)\s+pages\s+·\s+([A-Za-z\s]+)\s+·\s+\$(\d+\.\d{2})",  # Page Count · Format · Price
+                r"\$(\d+\.\d{2})\s+·\s+([A-Za-z\s]+)\s+·\s+(\d+)\s+pages",  # Price · Format · Page Count
+                r"([A-Za-z\s]+)\s+·\s+\$(\d+\.\d{2})\s+·\s+(\d+)\s+pages",  # Format · Price · Page Count
+                r"(\d+)\s+pages\s+·\s+\$(\d+\.\d{2})\s+·\s+([A-Za-z\s]+)",  # Page Count · Price · Format
+            ]
             # match = re.search(pattern, price_details_text)
+            # Try each pattern and return the first match found
+            match = None
+            for pattern in patterns:
+                match = re.search(pattern, price_details_text)
+                if match:
+                    break
 
             if match:
-                data["Cover Price"] = match.group(2)  # $16.99
-                data["Page Count"] = match.group(1)  # 176
+                # Determine which part is Format, Page Count, and Cover Price based on the groups
+                if (
+                    match.group(1) and "pages" not in match.group(1).lower()
+                ):  # Group 1 is Format if it doesn't contain "pages"
+                    data["Format"] = match.group(1).strip()
+                    data["Page Count"] = match.group(2)
+                    data["Cover Price"] = match.group(3)
+                elif (
+                    match.group(3) and "pages" not in match.group(3).lower()
+                ):  # Group 3 is Format if it doesn't contain "pages"
+                    data["Format"] = match.group(3).strip()
+                    data["Page Count"] = match.group(2)
+                    data["Cover Price"] = match.group(1)
+                else:  # Fallback
+                    data["Cover Price"] = match.group(1)
+                    data["Page Count"] = match.group(2)
+                    data["Format"] = match.group(3).strip()
             else:
                 print("Price and details not found.")
                 data["Cover Price"] = "N/A"
                 data["Page Count"] = "N/A"
+                data["Format"] = "N/A"
+
         else:
             print("Price and details section not found.")
             data["Cover Price"] = "N/A"
             data["Page Count"] = "N/A"
+            data["Format"] = "N/A"
 
         # Extract ISBN and Distributor SKU
         details_addtl_div = soup.find_all("div", class_="details-addtl-block")
@@ -222,6 +252,7 @@ def scrape_lcg_comic_page(url):
         print(f"Error extracting data: {e}")
         data["Cover Price"] = "N/A"
         data["Page Count"] = "N/A"
+        data["Format"] = "N/A"
         data["ISBN"] = "N/A"
         data["Distributor SKU"] = "N/A"
         data["Story Titles"] = ["N/A"]

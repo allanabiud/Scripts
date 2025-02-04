@@ -2,9 +2,11 @@ from time import sleep
 
 from rich.console import Console
 from rich.panel import Panel
-from rich.prompt import Prompt
+from rich.prompt import Confirm, Prompt
+from selenium import webdriver
 
 from comic_scraper.comicvine import session
+from comic_scraper.fill_form import fill_django_form, login
 from comic_scraper.lcg_scraper import scrape_lcg_comic_page
 from comic_scraper.output_handler import (
     create_directory,
@@ -22,16 +24,15 @@ from comic_scraper.utils import (
 # Initialize Rich Console
 console = Console()
 
-# Paths for output files
-csv_file = "./output/issue_details.csv"
-json_file = "./output/issue_details.json"
-html_file = "./output/issue_details.html"
-log_file = "./output/fetch_log.txt"  # Log file for saving input and fetch messages
+# Path for output files
+output_dir = "./output"
+csv_file = f"{output_dir}/issue_details.csv"
+json_file = f"{output_dir}/issue_details.json"
+html_file = f"{output_dir}/issue_details.html"
+log_file = f"{output_dir}/fetch_log.txt"
 
 # Ensure the output directory exists
-create_directory(json_file)
-create_directory(csv_file)
-create_directory(html_file)
+create_directory(output_dir)
 
 
 # Display script title
@@ -108,6 +109,7 @@ def process_issue_data(
         "UPC": lcg_data.get("UPC", "N/A"),
         "Cover Price": lcg_data.get("Cover Price", "N/A"),
         "Page Count": lcg_data.get("Page Count", "N/A"),
+        "Format": lcg_data.get("Format", "N/A"),
         "Description": description_cleaned,
         "Creators": lcg_data.get("Creators", "N/A"),
         "Creators (CV)": ", ".join(cv_creators) if cv_creators else "N/A",
@@ -178,6 +180,17 @@ def main():
         save_to_json(data, json_file)
         save_to_csv(data, csv_file)
         save_to_html(data, html_file)
+
+        # Prompt the user if they want to fill the form
+        if Confirm.ask(
+            "[bold green]Do you want to fill the Metron form with the data?[/bold green]",
+            default=True,
+        ):
+            # Set up Firefox WebDriver
+            options = webdriver.FirefoxOptions()
+            driver = webdriver.Firefox(options=options)
+            login(driver)
+            fill_django_form(driver, data)
 
         # Log results
         log_message(
