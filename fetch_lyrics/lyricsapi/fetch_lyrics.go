@@ -37,7 +37,7 @@ func main() {
 	}
 
 	// Configure the cookie for lyricsapi
-	api := spotify.NewClient("")
+	api := spotify.NewClient(cookie)
 
 	// Fetch song information using rmpc
 	songJSON, err := ioutil.ReadAll(os.Stdin) // Assumes rmpc song is piped into the script
