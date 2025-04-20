@@ -5,6 +5,13 @@ WALLPAPER="$1"
 # Apply colorscheme with pywal16
 /home/allanabiud/.local/bin/wal -i "$WALLPAPER"
 
+# walogram (telegram pywal16 colorscheme)
+walogram
+
+# dunst
+cp /home/allanabiud/.cache/wal/dunstrc /home/allanabiud/.config/dunst/dunstrc
+pkill dunst && dunst &
+
 # Restart waybar to apply new theme
 pkill waybar && waybar &
 
