@@ -41,7 +41,12 @@ def getFileMimeType(file):
 
 def createWorkDir(filename):
     cwd = pathlib.Path(
-        os.getenv("C2W_PATH", "D:\Books\Comics\TOOLS\Scripts\convert-webp")
+        os.getenv(
+            "C2W_PATH",
+            os.path.expanduser(
+                "~/Downloads/Library/SUPPORT/TOOLS/Scripts/mylar-webp-converter"
+            ),
+        )
     )
     # Quick and dirty fix for shlex.quote being inflexible... Thanks for appearing Li'l Empire.
     work_path = cwd.joinpath("work", filename.stem.replace("'", ""))
@@ -49,7 +54,7 @@ def createWorkDir(filename):
     try:
         work_path.mkdir(mode=0o775, parents=True)
     except FileExistsError as fee:
-        logger.info(f"Working directory already exists. Cleaning up.")
+        logger.info("Working directory already exists. Cleaning up.")
         shutil.rmtree(work_path)
         work_path.mkdir(mode=0o775, parents=True)
     return work_path
@@ -110,11 +115,12 @@ def convertToWebP(files: list):
 def createProcessedComic(work_path, output_path):
     logger.info(f"Creating converted file under {output_path}")
     if not output_path.parent.exists():
-        output_path.mkdir(0o775)
+        output_path.mkdir(parents=True, exist_ok=True)
     if output_path.exists():
         output_path.unlink()
-    output_file = shlex.quote(f"{str(output_path.absolute())[:-1]}z")
+
     cwd = shlex.quote(str(work_path.resolve()))
+    output_file = shlex.quote(f"{str(output_path.absolute())[:-1]}z")
     command = shlex.split(f"7z a -tzip {output_file} {cwd}/*.webp {cwd}/*.xml")
     try:
         subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -134,5 +140,5 @@ if __name__ == "__main__":
     files = getFilesToConvert(work_path)
     convertToWebP(files)
     createProcessedComic(work_path, comic_file)
-    logger.info(f"Conversion finished")
+    logger.info("Conversion finished")
     cleanUp(work_path)
