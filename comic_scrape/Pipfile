@@ -19,6 +19,8 @@ urllib3 = "==2.3.0"
 pydantic = "*"
 jinja2 = "*"
 rich = "*"
+selenium = "*"
+cloudscraper = "*"
 
 [dev-packages]
 

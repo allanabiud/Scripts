@@ -182,15 +182,15 @@ def main():
         save_to_html(data, html_file)
 
         # Prompt the user if they want to fill the form
-        if Confirm.ask(
-            "[bold green]Do you want to fill the Metron form with the data?[/bold green]",
-            default=True,
-        ):
-            # Set up Firefox WebDriver
-            options = webdriver.FirefoxOptions()
-            driver = webdriver.Firefox(options=options)
-            login(driver)
-            fill_django_form(driver, data)
+        # if Confirm.ask(
+        #     "[bold green]Do you want to fill the Metron form with the data?[/bold green]",
+        #     default=True,
+        # ):
+        #     # Set up Firefox WebDriver
+        #     options = webdriver.FirefoxOptions()
+        #     driver = webdriver.Firefox(options=options)
+        #     login(driver)
+        #     fill_django_form(driver, data)
 
         # Log results
         log_message(
