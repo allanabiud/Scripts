@@ -26,10 +26,10 @@ def strip_html_tags(text):
 # Helper function to process cover date to "DD-MM-YYYY" format with day as 1
 def process_cover_date(cover_date):
     if isinstance(cover_date, date):  # If it's already a datetime.date object
-        return cover_date.replace(day=1).strftime("%d-%m-%Y")
+        return cover_date.replace(day=1).strftime("%m-%d-%Y")
     try:
         # Parse the date using "01 Month Year" format (sets the day to 1)
-        return datetime.strptime(f"01 {cover_date}", "%d %B %Y").strftime("%d-%m-%Y")
+        return datetime.strptime(f"01 {cover_date}", "%B %d %Y").strftime("%m-%d-%Y")
     except ValueError:
         return "N/A"
 
@@ -37,9 +37,9 @@ def process_cover_date(cover_date):
 # Helper function to process in-store date to "DD-MM-YYYY" format
 def process_in_store_date(store_date):
     if isinstance(store_date, date):  # If it's already a datetime.date object
-        return store_date.strftime("%d-%m-%Y")
+        return store_date.strftime("%m-%d-%Y")
     try:
-        return datetime.strptime(store_date, "%Y-%m-%d").strftime("%d-%m-%Y")
+        return datetime.strptime(store_date, "%m-%Y-%d").strftime("%m-%d-%Y")
     except ValueError:
         return "N/A"
 
